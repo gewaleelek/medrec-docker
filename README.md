@@ -16,5 +16,5 @@ It does not work yet!
 ## Notes
 1. This requires a considerable amount of disk space because there's just a lot of dependencies to install
 2. I've tested this on
-  1. Debian Bookworm with Docker version 20.10.24+dfsg1, build 297e128 (installed using `sudo apt install docker.io`)
+    1. Debian Bookworm with Docker version 20.10.24+dfsg1, build 297e128 (installed using `sudo apt install docker.io`)
 
