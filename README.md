@@ -9,7 +9,9 @@ It does not work yet!
 * Docker
 
 ## Instructions
-1. Download this repo as a zip
+1. Download this repo as a zip and extract it somewhere
+2. Open your terminal and go into the extracted directory
+3. `docker build .`
 
 ## Notes
 1. This requires a considerable amount of disk space because there's just a lot of dependencies to install
