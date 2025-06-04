@@ -1,15 +1,17 @@
 FROM node:9.9-stretch
-ENV DEBIAN_FRONTEND=noninteractive
+
 ENV http_proxy=$HTTP_PROXY
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV PAT=$PAT
+
 RUN echo '//npm.pkg.github.com/:_authToken='$PAT >> /root/.npmrc && \
 	echo 'Acquire::http::Proxy "'$http_proxy'";' >> /etc/apt/apt.conf && \
     echo 'deb http://archive.debian.org/debian stretch main non-free-firmware non-free contrib' > /etc/apt/sources.list && \
 	apt-get update -q --allow-unauthenticated && \ 
 	apt-get install -q -y apt-transport-https debian-archive-keyring ca-certificates --allow-unauthenticated
 RUN apt-get update -q && \
-	apt-get install -q -y unzip mariadb-server libxtst-dev libxss-dev libgconf2-dev libnss3-dev libasound2-dev
+	apt-get install -q -y unzip mariadb-server libxtst-dev libxss-dev libgconf2-dev libnss3-dev libasound2-dev 
+	
 RUN wget -q https://dl.google.com/go/go1.23.0.linux-amd64.tar.gz -O /tmp/go.tar.gz && \
 	tar -xf /tmp/go.tar.gz -C /tmp && rm /tmp/go.tar.gz && \
 	mv /tmp/go /usr/local
@@ -39,11 +41,11 @@ RUN go mod init github.com/mitmedialab/medrec && \
 # Warning! This takes a long time
 RUN cd UserClient && \
 	npm install --loglevel verbose && \
-	npm run build --loglevel verbose
+	npm run build
 
-RUN tail -f /dev/null
 RUN cd GolangJSHelpers && \
-	npm install && sleep 10
+	npm install
+	
 RUN cd scripts && \
 	service mysql start && \
 	sleep 5 && \
@@ -59,9 +61,9 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 #These does not work yet
 
-CMD ["/root/work/medrec-master/medrec","EthereumClient","&"]
-CMD ["/root/work/medrec-master/medrec","DatabaseManager","&"]
-CMD ["/root/work/medrec-master/medrec","UserClient","&"]
+# CMD ["/root/work/medrec-master/medrec","EthereumClient","&"]
+# CMD ["/root/work/medrec-master/medrec","DatabaseManager","&"]
+# CMD ["/root/work/medrec-master/medrec","UserClient","&"]
 
 # intentionally hangs the build so we can inspect the container
-# RUN tail -f /dev/null
+ RUN tail -f /dev/null
