@@ -41,18 +41,25 @@ RUN go mod init github.com/mitmedialab/medrec && \
 # Warning! This takes a long time
 RUN cd UserClient && \
 	npm install --loglevel verbose && \
-	npm run build
+	npm run build --loglevel verbose
+
+# RUN ls -la UserClient/node_modules/electron-prebuilt/ && sleep 20 
 
 RUN cd GolangJSHelpers && \
-	npm install
+	npm install --loglevel verbose
+
+# RUN ls -la UserClient/node_modules/electron-prebuilt/ && sleep 20 
 	
 RUN cd scripts && \
 	service mysql start && \
 	sleep 5 && \
+	mysql -u root -e "UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE user = 'root' AND host = 'localhost'" && \
 	mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('medrecpassword'); FLUSH PRIVILEGES;" && \
 	mysql -u root < medrec-v1.sql && \
 	mysql -u root < medrecWebApp.sql && \
 	service mysql stop
+
+# RUN ls -la UserClient/node_modules/electron-prebuilt/ && sleep 20 
 
 WORKDIR /
 COPY entrypoint.sh /entrypoint.sh
